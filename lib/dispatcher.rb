@@ -1,4 +1,4 @@
-#require 'no_controller_error'
+require 'lib/no_controller_error'
 module Kivi
   class Dispatcher
     attr_accessor :controllers
@@ -6,13 +6,16 @@ module Kivi
       @controllers = []
       yield self if block_given?
     end
+    def controller(*args, &block)
+      @controllers << block
+    end
     def dispatch(request)
       @controllers.each do |controller|
         if response = controller.call(request)
           return response
         end
       end
-      #raise NoControllerError
+      raise NoControllerError
     end
   end
 end

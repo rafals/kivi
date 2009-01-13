@@ -25,4 +25,13 @@ describe Kivi::Dispatcher do
     end
     dispatcher.dispatch(request).should == data
   end
+  it "should handle controller helper method" do
+    request = Kivi::Request.new(:args => :data)
+    dispatcher = Kivi::Dispatcher.new do |set|
+      set.controller do |request|
+        request.args
+      end
+    end
+    dispatcher.dispatch(request).should == request.args
+  end
 end
