@@ -27,8 +27,8 @@ describe Kivi::Dispatcher do
   end
   it "should handle controller helper method" do
     request = Kivi::Request.new(:args => :data)
-    dispatcher = Kivi::Dispatcher.new do |set|
-      set.controller do |request|
+    dispatcher = Kivi::Dispatcher.new do |d|
+      d.add_controller do |request|
         request.args
       end
     end

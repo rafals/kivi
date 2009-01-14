@@ -2,7 +2,9 @@ module Kivi
   class Request
     def initialize(hash = {})
       hash[:params] ||= {}
-      hash[:params]['args'] = hash[:args] if hash[:args]
+      if hash[:args]
+        hash[:params]['args'] = (hash[:args].class == Array) ? hash[:args] : [hash[:args]]
+      end
       set_method      hash[:method]   || 'POST'
       set_params      hash[:params]
       set_path        hash[:path]     || '/'
@@ -27,12 +29,12 @@ module Kivi
       @params  = p
     end
     def set_path(path)
-      path = path =~ /\/$/ ? path[1..-2] : path[1..-1] # obcięcie ostatniego slesza
-      if position = path =~ /.\w+$/
-        @path = path[0..position-1]
-        @extension = path[position+1..-1]
+      new_path = path =~ /\/$/ ? path[1..-2] : path[1..-1] # obcięcie ostatniego slesza
+      if position = new_path =~ /\.\w+$/
+        @path = new_path[0..position-1]
+        @extension = new_path[position+1..-1]
       else
-        @path = path
+        @path = new_path
         @extension = nil
       end
     end

@@ -1,7 +1,6 @@
 require 'lib/errors'
-require 'lib/json_response'
 module Kivi
-  class Dispatcher
+  class Controller
     def initialize
       yield self if block_given?
     end
@@ -11,17 +10,15 @@ module Kivi
     def add_controller(*args, &block)
       controllers << block
     end
-    def dispatch(request)
+    def delegate
       controllers.each do |controller|
-        begin
-          if response = controller.call(request)
-            return response
-          else
-            nil
-          end
+        if response = controller.call(request)
+          return response
         end
       end
-      raise Kivi::UnhandledRequestError
+    end
+    def call(request)
+      delegate(request)
     end
   end
 end
