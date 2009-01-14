@@ -3,7 +3,7 @@ module Kivi
     def initialize(hash = {})
       hash[:params] ||= {}
       if hash[:args]
-        hash[:params]['args'] = (hash[:args].class == Array) ? hash[:args] : [hash[:args]]
+        hash[:params]['args'] = hash[:args]
       end
       set_method      hash[:method]   || 'POST'
       set_params      hash[:params]
